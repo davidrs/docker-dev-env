@@ -49,14 +49,14 @@ How to get cv2.imshow to work from within docker. Needed for simple-image-labele
 2) Cmds:
 ```
 open -a XQuartz
-
-ip=$(ifconfig en0 | grep inet | awk '$1=="inet" {print $2}')
-
+export ip=$(ifconfig en0 | grep inet | awk '$1=="inet" {print $2}')
 xhost + $ip
 
-# Can't use 'docker bash' or it won't work.
-# Container being used here is: dymat/opencv
-docker run -it –rm -e DISPLAY=$ip:0 -v /tmp/.X11-unix:/tmp/.X11-unix -v $(PWD):/drs \
+make run-cv2
+
+# or...
+
+docker run -it –rm -e DISPLAY=$ip:0 -v /tmp/.X11-unix:/tmp/.X11-unix -v $(PWD):/docker-dev \
   -v $(PWD)/simple-image-labeler/images:/images \
-  dymat/opencv python /docker-dev/photo-categorization/main.py
+  dymat/opencv python /docker-dev/simple-image-labeler/main.py
 ```
